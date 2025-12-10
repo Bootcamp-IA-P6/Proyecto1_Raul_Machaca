@@ -46,9 +46,32 @@ def taximeter():
             state_start_time = time.time()
             print(f"State changed to '{state}'.")
 
+        elif command == "finish":
+            if not trip_active:
+                print("Error: No active trip to finish.")
+                continue
+
+            duration = time.time() - state_start_time
+            if state == 'stopped':
+                stopped_time += duration
+            else:
+                moving_time += duration
+
+            total_fare = calculate_fare(stopped_time, moving_time)
+            print(f"\n--- Trip Summary ---")
+            print(f"Stopped time: {stopped_time:.1f} seconds")
+            print(f"Moving time: {moving_time:.1f} seconds")
+            print(f"Total fare: €{total_fare:.2f}")
+            print("---------------------\n")
+
+            # Solo finaliza el trayecto
+            trip_active = False
+            state = None
+
         elif command == "exit":
             print("Exiting the program. Goodbye!")
             break
+
         else:
             print("Unknown command. Use: start, stop, move, finish, or exit.")
 
