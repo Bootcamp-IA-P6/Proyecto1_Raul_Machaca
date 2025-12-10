@@ -64,9 +64,15 @@ def taximeter():
             print(f"Total fare: €{total_fare:.2f}")
             print("---------------------\n")
 
-            # Solo finaliza el trayecto
+            # 🔄 Reiniciar variables para nuevo trayecto
             trip_active = False
+            start_time = 0
+            stopped_time = 0
+            moving_time = 0
             state = None
+            state_start_time = 0
+
+            print("Ready for a new trip. Type 'start' to begin again.")
 
         elif command == "exit":
             print("Exiting the program. Goodbye!")
