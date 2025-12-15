@@ -1,12 +1,22 @@
 import logging
 import os
 
-LOG_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs", "taximeter.log")
+LOG_DIR = "logs"
+LOG_FILE = os.path.join(LOG_DIR, "taximeter.log")
 
-logging.basicConfig(
-    filename=LOG_FILE,
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-)
+def setup_logger():
+    os.makedirs(LOG_DIR, exist_ok=True)
 
-logger = logging.getLogger("taximeter_logger")
+    logger = logging.getLogger("taximeter")
+    logger.setLevel(logging.INFO)
+
+    file_handler = logging.FileHandler(LOG_FILE)
+    formatter = logging.Formatter(
+        "%(asctime)s - %(levelname)s - %(message)s"
+    )
+    file_handler.setFormatter(formatter)
+
+    if not logger.handlers:
+        logger.addHandler(file_handler)
+
+    return logger
