@@ -1,10 +1,37 @@
+# Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.env
-venv/
+*.pyc.*
+*.pyo.*
+*.pyd.*
+*.swp
+*.egg-info/
+*.egg
+*.pytest_cache/
+*.env
 .env/
-.idea/
+venv/
+env/
+
+# Logs y trayectos
+logs/*.log
+logs/trips_history.txt
+
+# IDEs
 .vscode/
-src/project-taximetro.code-workspace
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Pytest
+.cache/
+
+# Compiled files
+*.so
+*.dylib
