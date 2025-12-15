@@ -1,15 +1,36 @@
 import time
-from logger import logger     # <--- NUEVO IMPORT
+from src.logger import setup_logger
 
+# ========================
+# CONFIGURACIÓN DE TARIFAS
+# ========================
+STOPPED_RATE = 0.02   # €/segundo parado
+MOVING_RATE = 0.05    # €/segundo en movimiento
+
+logger = setup_logger()
+
+# ========================
+# FUNCIONES
+# ========================
 def calculate_fare(seconds_stopped, seconds_moving):
-    fare = seconds_stopped * 0.02 + seconds_moving * 0.05
-    logger.info(f"Cálculo de tarifa: stopped={seconds_stopped}, moving={seconds_moving}, total={fare}")
+    fare = seconds_stopped * STOPPED_RATE + seconds_moving * MOVING_RATE
     return fare
 
+
+def save_trip(stopped_time, moving_time, total_fare):
+    with open("logs/trips_history.txt", "a") as file:
+        file.write(
+            f"Stopped: {stopped_time:.1f}s | "
+            f"Moving: {moving_time:.1f}s | "
+            f"Total: €{total_fare:.2f}\n"
+        )
+
+
 def taximeter():
-    logger.info("Programa iniciado")
-    print("Welcome to the F5 Taximeter!")
-    print("Available commands: 'start', 'stop', 'move', 'finish', 'exit'\n")
+    print("🚕 Welcome to the F5 Taximeter!")
+    print("Commands: start | stop | move | finish | exit\n")
+
+    logger.info("Taximeter program started")
 
     trip_active = False
     stopped_time = 0
@@ -19,12 +40,11 @@ def taximeter():
 
     while True:
         command = input("> ").strip().lower()
-        logger.info(f"Comando recibido: {command}")
 
         if command == "start":
             if trip_active:
-                print("Error: A trip is already in progress.")
-                logger.warning("Intento de iniciar un viaje ya activo")
+                print("❌ Trip already in progress.")
+                logger.warning("Attempt to start a trip while another is active")
                 continue
 
             trip_active = True
@@ -33,16 +53,17 @@ def taximeter():
             state = "stopped"
             state_start_time = time.time()
 
-            logger.info("Viaje iniciado")
-            print("Trip started. Initial state: 'stopped'.")
+            print("✅ Trip started. State: stopped.")
+            logger.info("Trip started")
 
         elif command in ("stop", "move"):
             if not trip_active:
-                print("Error: No active trip. Please start first.")
-                logger.warning("Comando stop/move sin viaje activo")
+                print("❌ No active trip.")
+                logger.warning("State change without active trip")
                 continue
 
             duration = time.time() - state_start_time
+
             if state == "stopped":
                 stopped_time += duration
             else:
@@ -51,13 +72,13 @@ def taximeter():
             state = "stopped" if command == "stop" else "moving"
             state_start_time = time.time()
 
-            logger.info(f"Estado cambiado a {state}")
-            print(f"State changed to '{state}'.")
+            print(f"🔄 State changed to {state}")
+            logger.info(f"State changed to {state}")
 
         elif command == "finish":
             if not trip_active:
-                print("Error: No active trip to finish.")
-                logger.warning("Intento de finalizar sin viaje")
+                print("❌ No active trip to finish.")
+                logger.warning("Finish command without active trip")
                 continue
 
             duration = time.time() - state_start_time
@@ -67,23 +88,31 @@ def taximeter():
                 moving_time += duration
 
             total_fare = calculate_fare(stopped_time, moving_time)
+            save_trip(stopped_time, moving_time, total_fare)
 
-            print("\n--- Trip Summary ---")
-            print(f"Stopped time: {stopped_time:.1f} seconds")
-            print(f"Moving time: {moving_time:.1f} seconds")
+            print("\n📊 Trip Summary")
+            print(f"Stopped time: {stopped_time:.1f}s")
+            print(f"Moving time: {moving_time:.1f}s")
             print(f"Total fare: €{total_fare:.2f}")
-            print("---------------------\n")
+            print("------------------\n")
 
-            logger.info(f"Viaje finalizado. Total={total_fare}")
+            logger.info(
+                f"Trip finished | Stopped: {stopped_time:.1f}s | "
+                f"Moving: {moving_time:.1f}s | Fare: €{total_fare:.2f}"
+            )
 
             trip_active = False
-            state = None
+            print("Ready for a new trip 🚕")
 
         elif command == "exit":
-            logger.info("Programa cerrado por el usuario")
-            print("Exiting the program. Goodbye!")
+            logger.info("Program exited by user")
+            print("👋 Goodbye!")
             break
 
         else:
-            print("Unknown command.")
-            logger.warning(f"Comando desconocido: {command}")
+            print("❓ Unknown command.")
+            logger.warning(f"Unknown command: {command}")
+
+
+if __name__ == "__main__":
+    taximeter()
