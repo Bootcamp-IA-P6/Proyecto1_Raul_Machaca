@@ -1,4 +1,4 @@
-📄 README.md (actualizado)
+📄 README.md
 # 🚕 F5 Taximeter - Nivel Experto
 
 Simulación de un taxímetro avanzado en Python con versión web, base de datos y Docker.
@@ -20,28 +20,36 @@ Esta aplicación permite simular trayectos de taxi con:
 
 Estructura del proyecto
 project-taximetro/
-│
-├── logs/
-│   └── taximeter.log
-│
-├── src/
-│   ├── logger.py
-│   ├── main.py
-│   ├── auth.py
-│   └── db.py
-│
-├── web/ # Versión web con Streamlit
-│ └── app.py
-│
-├── tests/
-│   └── test_taximeter.py
-│
-├── taximeter.py
-├── config.py # Configuración tarifas, credenciales y Supabase
-├── Dockerfile # Contenedor Docker
-├── README.md
-├── requirements.txt # Dependencias
-└── .gitignore
+
+logs/
+
+   taximeter.log
+
+src/
+
+   logger.py
+
+   main.py
+
+   auth.py
+
+   db.py
+
+web/ 
+
+     app.py
+
+tests/
+
+     test_taximeter.py
+
+taximeter.py
+
+config.py 
+Dockerfile 
+README.md
+requirements.txt 
+.gitignore
 
 ## Requisitos
 
@@ -54,12 +62,12 @@ project-taximetro/
 
 ### 1️⃣ Clonar proyecto
 ```bash
-git clone <tu-repo-url>
+git clone https://github.com/Bootcamp-IA-P6/Proyecto1_Raul_Machaca.git
 cd project-taximetro
 
 2️⃣ Opción local (sin Docker)
 python -m venv venv
-venv\Scripts\activate       # Windows
+venv\Scripts\activate     
 pip install --upgrade pip
 pip install -r requirements.txt
 streamlit run web/app.py
