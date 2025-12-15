@@ -1,96 +1,21 @@
-Project Taxímetro - Nivel Avanzado
+📄 README.md (actualizado)
+# 🚕 F5 Taximeter - Nivel Experto
 
-Este proyecto simula un taxímetro en Python, incorporando programación orientada a objetos (OOP), una interfaz gráfica (GUI), autenticación de usuario y sistema de logs para llevar un historial de los viajes.
+Simulación de un taxímetro avanzado en Python con versión web, base de datos y Docker.
 
+## Descripción
 
+Esta aplicación permite simular trayectos de taxi con:
 
+- Control de tiempo parado y en movimiento
+- Cálculo de tarifas configurables
+- Registro histórico de trayectos en **Supabase**
+- Sistema de logs para trazabilidad
+- Autenticación de usuario
+- Interfaz web con **Streamlit**
+- Contenedor Docker para despliegue fácil y portátil
 
-Funcionalidades
-
-Iniciar y finalizar trayectos, controlando:
-
-Tiempo parado
-
-Tiempo en movimiento
-
-Cálculo automático del precio según tarifas configurables
-
-Registro histórico de trayectos (logs/trips_history.txt)
-
-Sistema de logs para trazabilidad (logs/taximeter.log)
-
-Autenticación con usuario y contraseña
-
-Interfaz gráfica con botones para manejar el viaje
-
-Código organizado en OOP
-
-Tests unitarios para funciones clave y la clase Trip
-
-
-
-Configuración
-
-El archivo config.py permite ajustar parámetros como tarifas y credenciales:
-
-STOPPED_RATE = 0.02   # €/segundo parado
-MOVING_RATE = 0.05    # €/segundo en movimiento
-
-USERNAME = "admin"
-PASSWORD = "1234"     # Para proyectos reales, usar hashing
-
-
-
-Cómo ejecutar
-
-Desde la raíz del proyecto, ejecuta:
-
-python -m src.main
-
-
-Se abrirá una ventana de login. Ingresa el usuario y contraseña definidos en config.py.
-
-La GUI tiene los siguientes botones:
-
-Start Trip → Inicia el viaje (estado inicial: parado)
-
-Move → Cambia a estado en movimiento
-
-Stop → Cambia a estado parado
-
-Finish Trip → Termina el viaje, calcula la tarifa y guarda el historial
-
-
-
-
-Historial de trayectos
-
-Cada viaje se guarda en logs/trips_history.txt con este formato:
-
-Stopped: 10.0s | Moving: 20.0s | Total: €1.40
-
-
-
-
-Los eventos y acciones también se registran en logs/taximeter.log.
-
-Tests unitarios
-
-Para probar las funciones de cálculo y la clase Trip:
-
-python -m pytest
-
-
-
-Requisitos
-
-Python 3.7 o superior
-
-Tkinter (normalmente incluido en Python)
-
-pytest (solo para tests)
-
-
+## Estructura del proyecto
 
 
 Estructura del proyecto
@@ -102,12 +27,63 @@ project-taximetro/
 ├── src/
 │   ├── logger.py
 │   ├── main.py
-│   └── auth.py
+│   ├── auth.py
+│   └── db.py
+│
+├── web/ # Versión web con Streamlit
+│ └── app.py
 │
 ├── tests/
 │   └── test_taximeter.py
 │
 ├── taximeter.py
-├── config.py
+├── config.py # Configuración tarifas, credenciales y Supabase
+├── Dockerfile # Contenedor Docker
 ├── README.md
+├── requirements.txt # Dependencias
 └── .gitignore
+
+## Requisitos
+
+- Python 3.10+
+- Streamlit
+- Supabase
+- Docker Desktop (para ejecución en contenedor)
+
+## Instalación y ejecución
+
+### 1️⃣ Clonar proyecto
+```bash
+git clone <tu-repo-url>
+cd project-taximetro
+
+2️⃣ Opción local (sin Docker)
+python -m venv venv
+venv\Scripts\activate       # Windows
+pip install --upgrade pip
+pip install -r requirements.txt
+streamlit run web/app.py
+
+3️⃣ Opción con Docker
+docker build -t taximeter-web .
+docker run -p 8501:8501 taximeter-web
+
+
+Luego abrir navegador en http://localhost:8501
+
+Uso
+
+Ingresar usuario y contraseña (por defecto admin / 1234)
+
+Iniciar trayecto → Start Trip
+
+Cambiar estado → Stop / Move
+
+Finalizar trayecto → Finish Trip
+
+Consultar historial de trayectos desde la base de datos
+
+Tests
+python -m pytest
+
+
