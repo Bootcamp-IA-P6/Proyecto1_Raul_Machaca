@@ -1,11 +1,13 @@
-from taximeter import calculate_fare
+from taximeter import Trip
 
 def test_calculate_fare_basic():
-    result = calculate_fare(10, 10)
-    expected = (10 * 0.02) + (10 * 0.05)
-    assert result == expected
-
+    trip = Trip()
+    trip.stopped_time = 10
+    trip.moving_time = 10
+    assert trip.calculate_fare() == 10*0.02 + 10*0.05
 
 def test_calculate_fare_zero():
-    result = calculate_fare(0, 0)
-    assert result == 0
+    trip = Trip()
+    trip.stopped_time = 0
+    trip.moving_time = 0
+    assert trip.calculate_fare() == 0
